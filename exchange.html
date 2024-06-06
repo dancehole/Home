@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Route and Parameter Checker</title>
+<style>
+/* 在这里嵌入 CSS */
+*{padding: 0px;margin: 0px;}
+		:root
+		{
+			--primary-color:#5fbaa7;
+		}
+		body
+		{
+  			display: flex;
+  			flex-direction: column;
+  			align-items: center;
+  			justify-content: center;
+  			height: 100vh;
+  			padding: 20px;
+		}
+		h1
+		{
+			color: var(--primary-color);
+		}
+		p
+		{
+			text-align: center;
+		}
+		.btn
+		{
+			  color: #fff;
+  				background-color: var(--primary-color);
+  				cursor: pointer;
+  				border-radius: 5px;
+  				padding: 5px 12px;
+  				font-size: 12px;
+		}
+		.money-img {
+  width: 150px;
+}
+.currency
+{
+	padding: 40px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.currency select {
+  padding: 10px 20px 10px 10px;
+   border: 1px solid #dedede;
+  font-size: 16px;  
+  appearance: none;
+  background-color: transparent;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%20000002%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+
+  background-position: right 10px top 50%; 
+ background-size: 12px,12px;
+ background-repeat: no-repeat;
+  }
+
+.currency input {
+	border: 0;
+	background-color: transparent;
+	font-size: 30px;
+	text-align: right;
+}
+.swap-rate-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	}
+	.rate
+	{
+		color: var(--primary-color);
+		font-size: 14px;
+		padding: 0 10px;
+	}
+	select:focus,
+input:focus,
+button:focus {
+  outline: 0;
+}
+
+@media (max-width: 600px) {
+  .currency input {
+    width: 200px;
+  }
+}
+
+
+
+</style>
+</head>
+<body>
+
+  <img src="https://cdn.jsdelivr.net/gh/dancehole/image@main/img/1080x1080.ico" alt="" class="money-img" />
+  <h1>汇率计算器</h1>
+  <p>选择货币单位获取汇率</p>
+  
+  <div class="container">
+    <div class="currency">
+      <select id="currency-one">
+        <option value="AED">阿联酋迪拉姆AED</option>
+        <option value="ARS">阿根廷比索ARS</option>
+        <option value="AUD">澳元AUD</option>
+        <option value="BGN">保加利亚列弗BGN</option>
+        <option value="BRL">巴西雷亚尔BRL</option>
+        <option value="BSD">白俄罗斯卢布BYR</option>
+        <option value="CNY" selected>人民币CNY</option>
+        <option value="DKK">丹麦克朗DKK</option>
+        <option value="EGP">埃及镑EGP</option>
+        <option value="EUR">欧元EUR</option>
+        <option value="FJD">斐济美元FJD</option>
+        <option value="GBP">英镑GBP</option>
+        <option value="GTQ">危地马拉格查儿GTQ</option>
+        <option value="HKD">港元HKD</option>
+        <option value="HRK">克罗地亚库纳HRK</option>
+        <option value="HUF">匈牙利福林HUF</option>
+        <option value="IDR">印尼盾IDR</option>
+        <option value="ILS">以色列新锡克尔ILS</option>
+        <option value="INR">印度卢比INR</option>
+        <option value="ISK">冰岛克朗ISK</option>
+        <option value="JPY">日元JPY</option>
+        <option value="KRW">韩元KRW</option>
+        <option value="KZT">哈萨克斯坦坚强戈KZT</option>
+        <option value="MXN">墨西哥比索MXN</option>
+        <option value="MYR">马来西亚林吉特MYR</option>
+        <option value="NOK">挪威克朗NOK</option>
+        <option value="NZD">新西兰元NZD</option>
+        <option value="PAB">巴拿马巴波亚PAB</option>
+        <option value="PEN">秘鲁索尔PEN</option>
+        <option value="PHP">菲律宾比索PHP</option>
+        <option value="PKR">巴基斯坦卢比PKR</option>
+        <option value="PLN">波兰兹罗提PLN</option>
+        <option value="PYG">巴拉圭瓜拉尼PYG</option>
+        <option value="RON">罗马尼亚新列伊RON</option>
+        <option value="RUB">卢布RUB</option>
+        <option value="SAR">沙特阿拉伯人里亚尔SAR</option>
+        <option value="SEK">瑞典克朗SEK</option>
+        <option value="SGD">新加坡元SGD</option>
+        <option value="THB">泰铢THB</option>
+        <option value="TRY">新土耳其里拉TRY</option>
+        <option value="TWD">新台币TWD</option>
+        <option value="UAH">乌克兰格里夫纳UAH</option>
+        <option value="USD">美元USD</option>
+        <option value="UYU">乌拉圭比索UYU</option>
+        <option value="VND">越南盾VND</option>
+        <option value="ZAR">南非兰特ZAR</option>
+        ​<option value="MOP">澳门币MOP</option>
+      </select>
+      <input type="number" id="amount-one" placeholder="0" value="1" />
+    </div>
+  
+    <div class="swap-rate-container">
+      <button class="btn" id="swap">
+        交换
+      </button>
+      <div class="rate" id="rate"></div>
+    </div>
+  
+    <div class="currency">
+      <select id="currency-two">
+        <option value="AED">阿联酋迪拉姆AED</option>
+        <option value="ARS">阿根廷比索ARS</option>
+        <option value="AUD">澳元AUD</option>
+        <option value="BGN">保加利亚列弗BGN</option>
+        <option value="BRL">巴西雷亚尔BRL</option>
+        <option value="BSD">白俄罗斯卢布BYR</option>
+        <option value="CNY">人民币CNY</option>
+        <option value="DKK">丹麦克朗DKK</option>
+        <option value="EGP">埃及镑EGP</option>
+        <option value="EUR">欧元EUR</option>
+        <option value="FJD">斐济美元FJD</option>
+        <option value="GBP">英镑GBP</option>
+        <option value="GTQ">危地马拉格查儿GTQ</option>
+        <option value="HKD">港元HKD</option>
+        <option value="HRK">克罗地亚库纳HRK</option>
+        <option value="HUF">匈牙利福林HUF</option>
+        <option value="IDR">印尼盾IDR</option>
+        <option value="ILS">以色列新锡克尔ILS</option>
+        <option value="INR">印度卢比INR</option>
+        <option value="ISK">冰岛克朗ISK</option>
+        <option value="JPY">日元JPY</option>
+        <option value="KRW">韩元KRW</option>
+        <option value="KZT">哈萨克斯坦坚强戈KZT</option>
+        <option value="MXN">墨西哥比索MXN</option>
+        <option value="MYR">马来西亚林吉特MYR</option>
+        <option value="NOK">挪威克朗NOK</option>
+        <option value="NZD">新西兰元NZD</option>
+        <option value="PAB">巴拿马巴波亚PAB</option>
+        <option value="PEN">秘鲁索尔PEN</option>
+        <option value="PHP">菲律宾比索PHP</option>
+        <option value="PKR">巴基斯坦卢比PKR</option>
+        <option value="PLN">波兰兹罗提PLN</option>
+        <option value="PYG">巴拉圭瓜拉尼PYG</option>
+        <option value="RON">罗马尼亚新列伊RON</option>
+        <option value="RUB">卢布RUB</option>
+        <option value="SAR">沙特阿拉伯人里亚尔SAR</option>
+        <option value="SEK">瑞典克朗SEK</option>
+        <option value="SGD">新加坡元SGD</option>
+        <option value="THB">泰铢THB</option>
+        <option value="TRY">新土耳其里拉TRY</option>
+        <option value="TWD">新台币TWD</option>
+        <option value="UAH">乌克兰格里夫纳UAH</option>
+        <option value="USD" selected>美元USD</option>
+        <option value="UYU">乌拉圭比索UYU</option>
+        <option value="VND">越南盾VND</option>
+        <option value="ZAR">南非兰特ZAR</option>
+        ​<option value="MOP">澳门币MOP</option>
+
+      </select>
+      <input type="number" id="amount-two" placeholder="0" />
+    </div>
+  </div>
+  
+
+<script>
+// 在这里嵌入 JavaScript
+// 获取节点
+const currencyEl_one = document.getElementById("currency-one");
+		const amountEl_one = document.getElementById("amount-one");
+		const currencyEl_two = document.getElementById("currency-two");
+		const amountEl_two = document.getElementById("amount-two");
+
+		const swap = document.getElementById("swap");
+		const rateEl = document.getElementById("rate");
+		// 通过fetch获取汇率并实现dom更新
+		function  calculate() {
+			const currency_one = currencyEl_one.value;//获取到是什么交换
+      const currency_two = currencyEl_two.value;//什么
+      fetch(`https://api.exchangerate-api.com/v4/latest/${currency_one}`)
+        .then(res=>res.json())
+        .then(data=>
+          /*下载数据,然后转换为json数据,然后是把数据赋值给*/
+          {
+            console.log(data)
+            const rate = data.rates[currency_two];
+            /*rates就是api里面的数组.意思是1块钱人民币转换成rates[currency_two]数组里面的值是多少.*/
+            rateEl.innerText=`1${currency_one}=${rate}${currency_two}`;//1CNY = 0.317255FJD.ratee就是转换的利率
+            amountEl_two.value=(amountEl_one.value*rate).toFixed(2);//人民币比如20转换成美元就是20rate就是一块钱人民币转换成美元是多少。*起来就得出结果了。。
+        });/*汇率的api*/
+
+		}
+		currencyEl_one.addEventListener("change", calculate);//左上角的动西
+		amountEl_one.addEventListener("input", calculate);//右上角的东西
+		currencyEl_two.addEventListener("change", calculate);//左下角的东西
+		amountEl_two.addEventListener("input", calculate);//右下角的东西
+		swap.addEventListener("click", () => {
+		  const temp = currencyEl_one.value;
+		  currencyEl_one.value = currencyEl_two.value;
+		  currencyEl_two.value = temp;
+		  calculate();//刷新把.
+		});//交换的按钮,按下第二次就是美元兑换成人民币是多少。
+	</script>
+
+
+</script>
+
+</body>
+</html>
