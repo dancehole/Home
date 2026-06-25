@@ -92,7 +92,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //主页左栏 主要信息（一般为介绍信息/头像）
     mainPageDes: "sztu在逃程序猿",
     mainPageDes2: "正在春招ing",
-    secPageDes: "距离考研还有xx天",
 
     logo_img: "./img/icon/dancehole.jpg",
     homeLink: "https://dancehole.github.io/Home/",
