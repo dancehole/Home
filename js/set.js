@@ -7,6 +7,78 @@ GitHub：https://github.com/imsyy/home
 
 //个人认为使用init.js比set.js+json更加方便，因为可以注释
 
+/* Token 管理工具 */
+const TOKEN_KEY = 'auth_token';
+const TOKEN_COOKIE_DAYS = 365;
+
+/* API 配置 */
+const API_CONFIG = {
+  baseUrl: 'http://127.0.0.1:5000',
+  hitokotoEndpoint: '/push',
+  hitokotoParams: {
+    max_length: 30,
+    encode: 'json'
+  }
+};
+
+function setCookie(name, value, days) {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
+}
+
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
+function deleteCookie(name) {
+  document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function getAuthToken() {
+  let token = getCookie(TOKEN_KEY);
+  if (!token || token === 'null' || token === 'undefined' || token.trim() === '') {
+    return null;
+  }
+  return token.trim();
+}
+
+function setAuthToken(token) {
+  if (token && token.trim() !== '') {
+    setCookie(TOKEN_KEY, token.trim(), TOKEN_COOKIE_DAYS);
+    return true;
+  }
+  return false;
+}
+
+function clearAuthToken() {
+  deleteCookie(TOKEN_KEY);
+}
+
+function hasAuthToken() {
+  return getAuthToken() !== null;
+}
+
+function fetchWithAuth(url, options = {}) {
+  const token = getAuthToken();
+  const headers = options.headers || {};
+  if (token) {
+    headers['X-Token'] = token;
+  }
+  return fetch(url, { ...options, headers });
+}
+
 /* 自定义配置 */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -19,12 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
     author: "Author Name",
     //主页左栏 主要信息（一般为介绍信息/头像）
     mainPageDes: "sztu在逃程序猿",
-    mainPageDes2: "正在南科大实习&备战考研ing",
+    mainPageDes2: "正在春招ing",
     secPageDes: "距离考研还有xx天",
 
     logo_img: "./img/icon/dancehole.jpg",
+    homeLink: "https://dancehole.github.io/Home/",
     github: "dancehole",      //username
-    qq: "https://cdn.jsdelivr.net/gh/dancehole/image@main/img/WechatNum",         //二维码链接，可以传到图床上
+    qq: "https://cdn.jsdelivr.net/gh/dancehole/image@main/danceholeLabs/common-template-wechat2.png",         //二维码链接，可以传到图床上
     email: "1391755954@qq.com",
     bilibili: "159625526",   //id
     telegram: "yourtelegramusername",
@@ -33,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // ...
     Copyright_text: "Copyright © 2023-2024 dancehole@sztu",
     beian: "(备案已失效)",
-
 
     //加载页面内容
     loadingTitle: "dancehole的小破站~",
@@ -62,8 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 设置相关链接 可注释取消：通常来说，我们不喜欢别人知道我们这么多平台的联系方式（怕社死）
   //个人主页
-  document.getElementById('my-home-page').setAttribute("href", "https://dancehole.gitee.io/web-d/")
-  document.getElementById('my-home-page').setAttribute("data-link-text", "我的个人主页");
+  document.getElementById('social').innerHTML += '<a href="' + data.homeLink + '" class="link" id="my-home-page" target="_blank" data-link-text="我的个人主页"><i class="fa-solid fa-house"></i></a>';
 
   //github
   document.getElementById('social').innerHTML += '<a href="https://github.com/' + data.github + '" class="link" id="github" style="margin-left: 4px" target="_blank" data-link-text="去 Github 看看"><i class="fa-brands fa-github"></i></a>'
@@ -81,35 +152,106 @@ document.addEventListener("DOMContentLoaded", function () {
   // ...
 
   // 页脚版权
-  document.getElementById("power-text").innerHTML = data.Copyright_text;
-  document.getElementById("beian").innerHTML = "&amp;&nbsp;" + data.beian;
+  const powerText = document.getElementById("power-text");
+  if (powerText) powerText.innerHTML = data.Copyright_text;
+  const beian = document.getElementById("beian");
+  if (beian) beian.innerHTML = "&amp;&nbsp;" + data.beian;
+
+  // Token 弹窗逻辑
+  const tokenModal = document.getElementById("token-modal");
+  const tokenInput = document.getElementById("token-input");
+  const tokenConfirm = document.getElementById("token-confirm");
+  const tokenSkip = document.getElementById("token-skip");
+
+  function showTokenModal() {
+    if (tokenModal) tokenModal.style.display = "flex";
+  }
+
+  function hideTokenModal() {
+    if (tokenModal) tokenModal.style.display = "none";
+  }
+
+  if (tokenConfirm) {
+    tokenConfirm.addEventListener("click", function () {
+      const token = tokenInput.value.trim();
+      if (token) {
+        setAuthToken(token);
+        hideTokenModal();
+        if (typeof iziToast !== "undefined") {
+          iziToast.show({
+            timeout: 2000,
+            icon: "fa-solid fa-check",
+            message: "令牌已保存"
+          });
+        }
+        if (typeof loadPrivateContent === "function") {
+          loadPrivateContent();
+        }
+      }
+    });
+  }
+
+  if (tokenSkip) {
+    tokenSkip.addEventListener("click", function () {
+      hideTokenModal();
+    });
+  }
+
+  if (tokenInput) {
+    tokenInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        tokenConfirm.click();
+      }
+    });
+  }
+
+  if (!hasAuthToken()) {
+    setTimeout(function () {
+      showTokenModal();
+    }, 1500);
+  }
 
   //2024-04-14 首页网站列表可以动态加载（响应式），支持1-15个网站外链（1行3-4个，最多3行）
   // 元素排布方式列表 可以自定义
   const customLayouts = {
+    // 1: { rows: 1, cols: 1 },
+    // 2: { rows: 1, cols: 2 },
+    // 3: { rows: 1, cols: 3 },
+    // 4: { rows: 2, cols: 1 },
+    // 5: { rows: 2, cols: 2 },
+    // 6: { rows: 2, cols: 3 },
+    // 7: { rows: 2, cols: 4 },
+    // 8: { rows: 2, cols: 5 },
+    // 9: { rows: 3, cols: 1 },
+    // 10: { rows: 3, cols: 2 },
+    // 11: { rows: 3, cols: 3 },
+    // 12: { rows: 3, cols: 4 },
     1: { rows: 1, cols: 1 },
     2: { rows: 1, cols: 2 },
     3: { rows: 1, cols: 3 },
-    4: { rows: 2, cols: 2 },
-    5: { rows: 2, cols: 3 },
-    6: { rows: 2, cols: 3 },
-    7: { rows: 2, cols: 4 },
+    4: { rows: 1, cols: 4 },
+    5: { rows: 2, cols: 1 },
+    6: { rows: 2, cols: 1 },
+    7: { rows: 2, cols: 3 },
     8: { rows: 2, cols: 4 },
-    9: { rows: 3, cols: 3 },
-    10: { rows: 3, cols: 4 },
-    11: { rows: 3, cols: 4 },
-    12: { rows: 3, cols: 4 },
-    13: { rows: 3, cols: 5 },
-    14: { rows: 3, cols: 5 },
-    15: { rows: 3, cols: 5 },
   };
   const webList = [
-    { "link": "https://dancehole.gitee.io/web-d/", "descript": "主页", "ico": '<i class="fa fa-home" aria-hidden="true"></i>' },  //ico格式 直接从FA copy过来 <i>...</i>
-    { "link": "https://dancehole.gitee.io/liwenyue/", "descript": "bir-lwy", "ico": '<i class="fa fa-birthday-cake" aria-hidden="true"></i>' },
-    { "link": "https://dancehole.gitee.io/my-blog/", "descript": "bir-dad", "ico": '<i class="fa fa-birthday-cake" aria-hidden="true"></i>' },
-    { "link": "https://dancehole.gitee.io/vue-chess", "descript": "五子棋", "ico": '<i class="fa fa-gamepad" aria-hidden="true"></i> ' },
-    { "link": "https://dancehole.gitee.io/code-labs", "descript": "codelabs", "ico": '<i class="fa fa-file-text" aria-hidden="true"></i>' },
-    { "link": "https://dancehole.gitee.io/todolist", "descript": "Todo", "ico": '<i class="fa fa-list" aria-hidden="true"></i>' },
+    // { "link": "https://dancehole.gitee.io/web-d/", "descript": "主页", "ico": '<i class="fa fa-home" aria-hidden="true"></i>' },  //ico格式 直接从FA copy过来 <i>...</i>
+    // { "link": "https://dancehole.gitee.io/liwenyue/", "descript": "bir-lwy", "ico": '<i class="fa fa-birthday-cake" aria-hidden="true"></i>' },
+    // { "link": "https://dancehole.gitee.io/my-blog/", "descript": "bir-dad", "ico": '<i class="fa fa-birthday-cake" aria-hidden="true"></i>' },
+    // { "link": "https://dancehole.gitee.io/vue-chess", "descript": "五子棋", "ico": '<i class="fa fa-gamepad" aria-hidden="true"></i> ' },
+    // { "link": "https://dancehole.gitee.io/code-labs", "descript": "codelabs", "ico": '<i class="fa fa-file-text" aria-hidden="true"></i>' },
+    // { "link": "https://dancehole.gitee.io/todolist", "descript": "Todo", "ico": '<i class="fa fa-list" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/minigame/", descript: "小游戏", ico: '<i class="fa fa-gamepad" aria-hidden="true"></i>' }, // 与五子棋图标重复，可改为 fa-joystick 或 fa-dice
+    { link: "https://dancehole.cn/littletext/", descript: "记事本", ico: '<i class="fa fa-edit" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/worktable/", descript: "工作台", ico: '<i class="fa fa-desktop" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/todo/", descript: "待办事项", ico: '<i class="fa fa-check-square" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/system/message", descript: "个人语录", ico: '<i class="fa fa-quote-right" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/system/contacts", descript: "通讯录", ico: '<i class="fa fa-address-book" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/system/faceRec", descript: "人脸识别系统", ico: '<i class="fa fa-user-circle" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/system/imageList", descript: "图床", ico: '<i class="fa fa-image" aria-hidden="true"></i>' },
+
+
     //超过15个的部分会自动忽略，不建议超过9个
   ]
   //获取排布信息 准备动态排布
@@ -120,14 +262,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //构建行
   for (let i = 0; i < row; i++) {
-    if (i === 0) document.getElementById("web-link").innerHTML += `<div class="row"  id="web-row` + (i+1) + `"><div>`
-    else document.getElementById("web-link").innerHTML += `<div class="row"  id="web-row`+ (i+1) + `" style="margin-top: 1.5rem;"><div>`
+    if (i === 0) document.getElementById("web-link").innerHTML += `<div class="row"  id="web-row` + (i + 1) + `"><div>`
+    else document.getElementById("web-link").innerHTML += `<div class="row"  id="web-row` + (i + 1) + `" style="margin-top: 1.5rem;"><div>`
 
     //构建元素
     for (let j = 0; j < cols; j++) {
       //使用反引号`定义一个带换行的字符串
-      let style= j%2==0 ? '' :' 2 '
-      let extraHtml = `<div class="col `+style+`">  
+      let style = j % 2 == 0 ? '' : ' 2 '
+      let extraHtml = `<div class="col ` + style + `">  
       <a href="`+ webList[arrange].link + `" target="_blank">
         <div class="link-card cards">
           `+ webList[arrange].ico + `
@@ -135,23 +277,54 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </a>
       </div>`
-      let rowId = "web-row"+(i+1)
+      let rowId = "web-row" + (i + 1)
       document.getElementById(rowId).innerHTML += extraHtml
       arrange++
-      if(arrange==webListLen || arrange>=15)break //排列超过15个会报错，这里强行退出
+      if (arrange == webListLen || arrange >= 15) break //排列超过15个会报错，这里强行退出
     }
   }
 
+  // 杂七杂八 链接动态生成
+  const miscLinks = [
+    { "link": "#", "descript": "站点监测", "ico": "" },
+    { "link": "https://blog.bywind.xyz/music/", "descript": "播放器", "ico": "" },
+    { "link": "#", "descript": "编辑器", "ico": "" },
+    { "link": "https://blog.bywind.xyz//gallery/", "descript": "时光相册", "ico": "" },
+    { "link": "#", "descript": "文件库", "ico": "" },
+    { "link": "#", "descript": "更多", "ico": "", "isMore": true },
+  ];
 
-  // // //动态加载 网站列表 外链
-  // document.getElementById("web-row2").innerHTML+=extraHtml
-  // document.getElementById("web-row2").innerHTML+=extraHtml
+  const miscContainer = document.getElementById("misc-links");
+  if (miscContainer) {
+    const miscCols = 3;
+    const miscRows = Math.ceil(miscLinks.length / miscCols);
+    let miscArrange = 0;
 
-  //定义新行
-  //document.getElementById("web-link").innerHTML += `<div class="row"  id="web-row3" style="margin-top: 1.5rem;"><div>`
-  //document.getElementById("web-row3").innerHTML += extraHtml
+    for (let i = 0; i < miscRows; i++) {
+      let rowHtml = i === 0 ? '<div class="row">' : '<div class="row" style="margin-top: 1.5rem;">';
+      let rowContent = '';
 
+      for (let j = 0; j < miscCols && miscArrange < miscLinks.length; j++) {
+        const item = miscLinks[miscArrange];
+        const colStyle = j % 2 === 0 ? '' : ' 2 ';
+        const moreId = item.isMore ? 'id="openmore"' : '';
+        const linkTarget = item.link !== '#' ? 'target="_blank"' : '';
 
+        rowContent += `<div class="col ` + colStyle + `">
+          <a href="` + item.link + `" ` + linkTarget + ` ` + moreId + `>
+            <div class="link-card cards">
+              ` + item.ico + `
+              <span class="link-name">` + item.descript + `</span>
+            </div>
+          </a>
+        </div>`;
+        miscArrange++;
+      }
+
+      rowHtml += rowContent + '</div>';
+      miscContainer.innerHTML += rowHtml;
+    }
+  }
 
   // 更新日志 动态加载
   // 2024-04-13 更新：更新日志写入set.js 从html中移出  动态加载

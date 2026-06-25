@@ -6,8 +6,8 @@
   <meta charset="utf-8">
   <!-- (允许跨域)设置了跨域资源共享（CORS）的策略，允许所有来源的访问。任何网站上的 JavaScript 脚本都可以从该网站获取数据，而不会受到同源策略的限制。 -->
   <meta http-equiv="Access-Control-Allow-Origin" content="*">
-  <!-- 强制 HTTPS，若不需要可删除，但可能出现问题 -->
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <!-- 强制 HTTPS 已注释，避免本地/内网部署时资源加载失败 -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
   <!-- 定义了页面渲染方式为 WebKit 内核。 -->
   <meta name="renderer" content="webkit" />
   <!-- 指定了页面在 IE 浏览器中采用最新的渲染模式，并在 Chrome 中使用 Chrome 内核。 -->
@@ -24,13 +24,12 @@
   <meta name="author" content="dancehole">
   <title>dancehole's blog</title>
   <!-- jQuery -->
-  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
   <!-- HarmonyOS Sans 字体-->
   <!-- https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css -->
   <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
   <!-- 引入样式 -->
-  <link rel="stylesheet" type="text/css"
-    href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/bootstrap/5.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
   <!-- 自定义的css文件 整体样式/移动端/加载动画/网站动画-->
   <link rel="stylesheet" type="text/css" href="./css/style.css">
   <link rel="stylesheet" type="text/css" href="./css/mobile.css">
@@ -40,17 +39,17 @@
   <link rel="icon" href="./img/icon/dancehole.png">
   <!-- <link rel="apple-touch-icon" href="https://aurora-cdn.wuhobin.top/blog/favicon.png"> -->
   <!-- Izitoast /消息通知 功能-->
-  <link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-y/izitoast/1.4.0/css/iziToast.min.css">
-  <script type="text/javascript"
-    src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/izitoast/1.4.0/js/iziToast.min.js">
-    </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js">
+  </script>
   <!-- FontAwesome css/方便使用矢量图标-->
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-  <!-- Aplayer 音视频库-->
-  <link rel="stylesheet" href="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/aplayer/1.10.1/APlayer.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-y/aplayer/1.10.1/APlayer.min.js" crossorigin="anonymous"
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.2/css/all.min.css">
+  <!-- Aplayer 音视频库（已注释）
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js" crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
+  -->
 
   <!-- 引入 Google Analytics 的跟踪代码。 -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WVH35V11W"></script> -->
@@ -109,7 +108,7 @@
             <div class="main-left">
               <!--Logo-->
               <div class="main-img">
-                <img id="logo-img" src="....." alt="img">
+                <img id="logo-img" src="./img/icon/dancehole.jpg" alt="img">
                 <div class="img-title">
                   <span class="img-title-big" id="logo-text-1">dancehole<br></span>
                   <span class="img-text" id="logo-text-2">四号的个人主页</span>
@@ -126,7 +125,8 @@
               </div>
               <!--社交链接-->
               <div class="social" id="social">
-                <a href="https://dancehole.gitee.io/web-d/" class="link" id="my-home-page" style="margin-left: 4px" target="_blank" data-link-text="我的个人主页">
+                <a href="https://dancehole.gitee.io/web-d/" class="link" id="my-home-page" style="margin-left: 4px"
+                  target="_blank" data-link-text="我的个人主页">
                   <i class="fa-solid fa-house"></i>
                 </a>
                 <!-- 只保留了个人主页链接，其余链接可以去set.js修改 -->
@@ -161,20 +161,21 @@
                 <div class="col hitokotos">
                   <!--一言-->
                   <div class="hitokoto cards" id="hitokoto">
-                    <!--切换音乐-->
+                    <!--切换音乐（已注释）
                     <div class="open-music fixed-top" id="open-music">
                       <i class="fa-solid fa-compact-disc"></i>
                       <span>&nbsp;打开音乐播放器</span>
                     </div>
-                    <!--切换音乐结束-->
+                    -->
                     <div class="hitokoto-all">
+                      <div class="hitokoto-topic"><span id="hitokoto_topic"></span></div>
                       <div class="hitokoto-text"><span id="hitokoto_text">每一个人都应该明确自己的方向和位置</span>
                       </div>
                       <div class="hitokoto-from">-「&nbsp;<span id="from_text">無名</span>&nbsp;」
                       </div>
                     </div>
                   </div>
-                  <!--音乐-->
+                  <!--音乐（已注释）
                   <div class="music" id="music">
                     <div class="music-all">
                       <div class="music-button">
@@ -201,6 +202,7 @@
                       </div>
                     </div>
                   </div>
+                  -->
                 </div>
                 <div class="col times">
                   <!--时间-->
@@ -224,9 +226,9 @@
                 <i class="fa-solid fa-link"></i>
                 <span class="line-text">网站列表</span>
               </div>
-              <!--网站链接 为了支持动态增加 移动至js实现-->
+              <!--网站链接 为了支持动态增加 移动至set.js实现-->
               <div class="link" id="web-link">
-                
+
                 <!--第一行-->
                 <!-- <div class="row" >
                   <div class="col">
@@ -282,7 +284,7 @@
                     </a>
                   </div>
                 </div> -->
-                
+
               </div>
             </div>
           </div>
@@ -338,53 +340,8 @@
             <span class="line-text">杂七杂八</span>
             <i class="fa-solid fa-angle-right"></i>
           </div>
-          <!--网站链接-->
-          <div class="row">
-            <div class="col">
-              <a href="#" target="_blank">
-                <div class="link-card cards">
-                  <span class="link-name">站点监测</span>
-                </div>
-              </a>
-            </div>
-            <div class="col 2">
-              <a href="https://blog.bywind.xyz/music/" target="_blank">
-                <div class="link-card cards">
-                  <span class="link-name">播放器</span>
-                </div>
-              </a>
-            </div>
-            <div class="col">
-              <a href="#" target="_blank">
-                <div class="link-card cards">
-                  <span class="link-name">编辑器</span>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="row" style="margin-top: 1.5rem;">
-            <div class="col">
-              <a href="https://blog.bywind.xyz//gallery/" target="_blank">
-                <div class="link-card cards">
-                  <span class="link-name">时光相册</span>
-                </div>
-              </a>
-            </div>
-            <div class="col 2">
-              <a href="#" target="_blank">
-                <div class="link-card cards">
-                  <span class="link-name">文件库</span>
-                </div>
-              </a>
-            </div>
-            <div class="col">
-              <a id="openmore">
-                <div class="link-card cards">
-                  <span class="link-name">更多</span>
-                </div>
-              </a>
-            </div>
-          </div>
+          <!--网站链接 动态生成-->
+          <div id="misc-links"></div>
         </div>
         <!--更多页面-->
         <div class="box" id="box" style="display: none">
@@ -455,7 +412,8 @@
                     <div class="accordion-body">
                       <div class="upnote">
                         <span class="uptext" id="upnote-content">
-                          2024-04-02&nbsp;&nbsp;<i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;git拉取项目，作首次修改（个人主页）<br>
+                          2024-04-02&nbsp;&nbsp;<i
+                            class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;git拉取项目，作首次修改（个人主页）<br>
                           <!-- 其余内容改在js里添加 -->
                         </span>
                       </div>
@@ -472,21 +430,71 @@
             </div>
           </div>
         </div>
+        <!--Token 输入弹窗-->
+        <div class="token-modal" id="token-modal" style="display: none">
+          <div class="token-modal-wrapper cards">
+            <div class="token-modal-title">
+              <i class="fa-solid fa-key"></i>
+              <span>&nbsp;输入访问令牌</span>
+            </div>
+            <div class="token-modal-desc">输入令牌以解锁私有内容，可跳过使用公共资源</div>
+            <input type="password" class="token-input" id="token-input" placeholder="请输入访问令牌...">
+            <div class="token-modal-buttons">
+              <button class="token-btn token-btn-skip" id="token-skip">跳过</button>
+              <button class="token-btn token-btn-confirm" id="token-confirm">确认</button>
+            </div>
+          </div>
+        </div>
+        <!--语录详情弹窗-->
+        <div class="hitokoto-detail-modal" id="hitokoto-detail-modal" style="display: none">
+          <div class="hitokoto-detail-wrapper cards">
+            <div class="detail-close">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div class="detail-topic" id="detail-topic"></div>
+            <div class="detail-content" id="detail-content"></div>
+            <div class="detail-type">-「&nbsp;<span id="detail-type"></span>&nbsp;」</div>
+            <div class="detail-feedback" id="detail-feedback-section">
+              <div class="feedback-title">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>&nbsp;反馈</span>
+              </div>
+              <div class="feedback-buttons">
+                <button class="feedback-btn cards" data-feedback-type="helpful">
+                  <i class="fa-solid fa-thumbs-up"></i>
+                  <span>&nbsp;有帮助</span>
+                </button>
+                <button class="feedback-btn cards" data-feedback-type="learned">
+                  <i class="fa-solid fa-lightbulb"></i>
+                  <span>&nbsp;学到了</span>
+                </button>
+                <button class="feedback-btn cards" data-feedback-type="received">
+                  <i class="fa-solid fa-inbox"></i>
+                  <span>&nbsp;已收到</span>
+                </button>
+                <button class="feedback-btn cards" data-feedback-type="done">
+                  <i class="fa-solid fa-check-circle"></i>
+                  <span>&nbsp;做到了</span>
+                </button>
+                <button class="feedback-btn cards feedback-muted" data-feedback-type="muted">
+                  <i class="fa-solid fa-bell-slash"></i>
+                  <span>&nbsp;不再提醒</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <!-- 版权信息 -->
     <footer id="footer" class="fixed-bottom footer">
       <div class="power">
-        <span id="power">
-          <!-- 多余了 :Copyright&nbsp;&copy; -->
-          <!-- <script>
-            document.write((new Date()).getFullYear());
-          </script> -->
-          <a id="power-text">Aurora</a>
-        </span>
-
-        <!-- 站点备案 -->
-        <a href="https://beian.miit.gov.cn" id="beian" target="_blank">&amp;&nbsp;鄂ICP备20006685号（示例）</a>
+        <div class="beian-info">
+          <!-- 备案信息 -->
+          <a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2024302719号</a>
+          <span>© 2024-2026 dancehole. ALL RIGHTS RESERVED.</span>
+          <!-- 根据需要添加更多的备案信息 -->
+        </div>
       </div>
       <!-- 歌词显示 -->
       <div id="lrc"></div>
@@ -505,13 +513,12 @@
     <div class="noscript fixed-top">请开启 JavaScript</div>
   </noscript>
   <!-- JS -->
-  <script type="text/javascript" src="./js/main.js"></script>
   <script type="text/javascript" src="./js/set.js"></script>
+  <script type="text/javascript" src="./js/main.js"></script>
   <script type="text/javascript" src="./js/time.js"></script>
   <script type="text/javascript" src="./js/js.cookie.js"></script>
-  <script type="text/javascript"
-    src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/bootstrap/5.1.0/js/bootstrap.min.js">
-    </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js">
+  </script>
 </body>
 
 </html>

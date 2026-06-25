@@ -7,7 +7,7 @@ GitHub：https://github.com/imsyy/home
 
 //弹窗样式
 iziToast.settings({
-    timeout: 10000,
+    timeout: 1000,
     progressBar: false,
     close: false,
     closeOnEscape: true,
@@ -41,7 +41,6 @@ body.addEventListener('mousemove', (e) => {
 });
 
 
-
 //加载完成后执行
 window.addEventListener('load', function () {
 
@@ -61,10 +60,10 @@ window.addEventListener('load', function () {
         });
     }, 800);
 
-    //延迟加载音乐播放器
-    let element = document.createElement("script");
-    element.src = "./js/music.js";
-    document.body.appendChild(element);
+    //延迟加载音乐播放器（已注释）
+    // let element = document.createElement("script");
+    // element.src = "./js/music.js";
+    // document.body.appendChild(element);
 
     //中文字体缓加载-此处写入字体源文件 （暂时弃用）
     //先行加载简体中文子集，后续补全字集
@@ -99,13 +98,152 @@ setTimeout(function () {
 // document.body.appendChild(new_element);
 
 //获取一言
-fetch('https://v1.hitokoto.cn?max_length=24')
-    .then(response => response.json())
-    .then(data => {
-        $('#hitokoto_text').html(data.hitokoto)
-        $('#from_text').html(data.from)
+const HITOKOTO_PUBLIC_API = 'https://v1.hitokoto.cn?max_length=24';
+let currentHitokoto = null;
+let isPrivateHitokoto = false;
+
+function getPrivateHitokotoUrl() {
+    const params = new URLSearchParams(API_CONFIG.hitokotoParams);
+    return API_CONFIG.baseUrl + API_CONFIG.hitokotoEndpoint + '?' + params.toString();
+}
+
+function truncateText(text, maxLen) {
+    if (!text) return '';
+    if (text.length <= maxLen) return text;
+    return text.substring(0, maxLen) + '...';
+}
+
+function renderPrivateHitokoto(data) {
+    currentHitokoto = data;
+    isPrivateHitokoto = true;
+    const topic = data.topic || '';
+    const content = data.content || '';
+    const type = data.type || '私有';
+    $('#hitokoto_topic').html(truncateText(topic, 15));
+    $('#hitokoto_text').html(truncateText(content, 30));
+    $('#from_text').html(type);
+}
+
+function renderPublicHitokoto(data) {
+    currentHitokoto = data;
+    isPrivateHitokoto = false;
+    $('#hitokoto_topic').html('');
+    $('#hitokoto_text').html(data.hitokoto || '');
+    $('#from_text').html(data.from || '');
+}
+
+function getHitokoto() {
+    if (hasAuthToken()) {
+        fetchWithAuth(getPrivateHitokotoUrl())
+            .then(response => {
+                if (response.status === 401) {
+                    clearAuthToken();
+                    return fetch(HITOKOTO_PUBLIC_API).then(r => r.json()).then(data => {
+                        renderPublicHitokoto(data);
+                        return null;
+                    });
+                }
+                if (!response.ok) {
+                    return fetch(HITOKOTO_PUBLIC_API).then(r => r.json()).then(data => {
+                        renderPublicHitokoto(data);
+                        return null;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.content !== undefined) {
+                    renderPrivateHitokoto(data);
+                }
+            })
+            .catch(err => {
+                console.error('hitokoto error:', err);
+                fetch(HITOKOTO_PUBLIC_API)
+                    .then(response => response.json())
+                    .then(data => {
+                        renderPublicHitokoto(data);
+                    })
+                    .catch(console.error);
+            });
+    } else {
+        fetch(HITOKOTO_PUBLIC_API)
+            .then(response => response.json())
+            .then(data => {
+                renderPublicHitokoto(data);
+            })
+            .catch(console.error)
+    }
+}
+
+getHitokoto();
+
+function loadPrivateContent() {
+    getHitokoto();
+}
+
+function showHitokotoDetail() {
+    if (!currentHitokoto) return;
+    const modal = document.getElementById('hitokoto-detail-modal');
+    if (!modal) return;
+    if (isPrivateHitokoto) {
+        $('#detail-topic').html(currentHitokoto.topic || '');
+        $('#detail-content').html(currentHitokoto.content || '');
+        $('#detail-type').html(currentHitokoto.type || '');
+        $('#detail-feedback-section').show();
+    } else {
+        $('#detail-topic').html('');
+        $('#detail-content').html(currentHitokoto.hitokoto || '');
+        $('#detail-type').html(currentHitokoto.from || '');
+        $('#detail-feedback-section').hide();
+    }
+    modal.style.display = 'flex';
+}
+
+function hideHitokotoDetail() {
+    const modal = document.getElementById('hitokoto-detail-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function sendFeedback(type) {
+    if (!currentHitokoto || !isPrivateHitokoto) return;
+    const id = currentHitokoto.id;
+    if (!id) return;
+    fetchWithAuth(API_CONFIG.baseUrl + '/feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id, type: type })
     })
-    .catch(console.error)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                iziToast.show({
+                    timeout: 2000,
+                    icon: "fa-solid fa-check",
+                    message: '反馈已记录'
+                });
+                hideHitokotoDetail();
+                setTimeout(function () {
+                    getHitokoto();
+                }, 500);
+            } else {
+                iziToast.show({
+                    timeout: 2000,
+                    icon: "fa-solid fa-circle-exclamation",
+                    message: data.msg || '反馈失败'
+                });
+            }
+        })
+        .catch(err => {
+            console.error('feedback error:', err);
+            iziToast.show({
+                timeout: 2000,
+                icon: "fa-solid fa-circle-exclamation",
+                message: '网络错误，反馈失败'
+            });
+        });
+}
 
 let times = 0;
 $('#hitokoto').click(function () {
@@ -117,19 +255,35 @@ $('#hitokoto').click(function () {
                 clearInterval(index);
             }
         }, 1000);
-        fetch('https://v1.hitokoto.cn?max_length=24')
-            .then(response => response.json())
-            .then(data => {
-                $('#hitokoto_text').html(data.hitokoto)
-                $('#from_text').html(data.from)
-            })
-            .catch(console.error)
+        getHitokoto();
     } else {
         iziToast.show({
             timeout: 1000,
             icon: "fa-solid fa-circle-exclamation",
             message: '你点太快了吧'
         });
+    }
+});
+
+$('#hitokoto').on('contextmenu', function (e) {
+    e.preventDefault();
+    showHitokotoDetail();
+});
+
+$(document).on('click', '#hitokoto-detail-modal .detail-close', function () {
+    hideHitokotoDetail();
+});
+
+$(document).on('click', '#hitokoto-detail-modal', function (e) {
+    if (e.target.id === 'hitokoto-detail-modal') {
+        hideHitokotoDetail();
+    }
+});
+
+$(document).on('click', '.feedback-btn', function () {
+    const type = $(this).data('feedback-type');
+    if (type) {
+        sendFeedback(type);
     }
 });
 
@@ -366,7 +520,7 @@ $('#switchmenu').on('click', function () {
 });
 
 //更多弹窗页面
-$('#openmore').on('click', function () {
+$(document).on('click', '#openmore', function () {
     $('#box').css("display", "block");
     $('#row').css("display", "none");
     $('#more').css("cssText", "display:none !important");

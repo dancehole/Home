@@ -295,6 +295,13 @@ span#change {
     flex-direction: column;
 }
 
+.hitokoto-topic {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
 .hitokoto-text {
     font-size: 1.10rem;
 }
@@ -1042,4 +1049,236 @@ footer {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #eeeeee;
+}
+
+/* Token 弹窗 */
+.token-modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, .3);
+    backdrop-filter: blur(5px);
+    animation: fade 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.token-modal-wrapper {
+    width: 380px;
+    background: rgb(0 0 0 / 25%);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.token-modal-title {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.token-modal-desc {
+    font-size: 0.85rem;
+    color: #ffffff99;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.token-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgb(255 255 255 / 15%);
+    border-radius: 8px;
+    background: rgb(255 255 255 / 10%);
+    color: #fff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: 0.3s;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.token-input::placeholder {
+    color: #ffffff60;
+}
+
+.token-input:focus {
+    border-color: rgb(255 255 255 / 30%);
+    background: rgb(255 255 255 / 15%);
+}
+
+.token-modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.token-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.token-btn-skip {
+    background: transparent;
+    color: #ffffff99;
+    border: 1px solid rgb(255 255 255 / 20%);
+}
+
+.token-btn-skip:hover {
+    background: rgb(255 255 255 / 10%);
+    color: #fff;
+}
+
+.token-btn-confirm {
+    background: rgb(255 255 255 / 90%);
+    color: #333;
+}
+
+.token-btn-confirm:hover {
+    background: #fff;
+    transform: scale(1.02);
+}
+
+.token-btn:active {
+    transform: scale(0.98);
+}
+
+/* 语录详情弹窗 */
+.hitokoto-detail-modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, .3);
+    backdrop-filter: blur(5px);
+    animation: fade 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hitokoto-detail-wrapper {
+    width: 480px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: rgb(0 0 0 / 25%);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
+    animation: fadeInUp 0.4s ease;
+    position: relative;
+    color: #fff;
+}
+
+.detail-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+.detail-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.detail-topic {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.detail-content {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    word-break: break-all;
+}
+
+.detail-type {
+    font-weight: bold;
+    text-align: right;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.detail-feedback {
+    border-top: 1px solid rgb(255 255 255 / 15%);
+    padding-top: 20px;
+}
+
+.feedback-title {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.feedback-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.feedback-btn {
+    padding: 8px 14px;
+    border: 1px solid rgb(255 255 255 / 15%);
+    background: rgb(255 255 255 / 8%);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.feedback-btn:hover {
+    background: rgb(255 255 255 / 15%);
+    transform: translateY(-2px);
+}
+
+.feedback-btn:active {
+    transform: scale(0.96);
+}
+
+.feedback-muted {
+    border-color: rgb(255 100 100 / 30%);
+    color: #ff9999;
+}
+
+.feedback-muted:hover {
+    background: rgb(255 100 100 / 15%);
 }
