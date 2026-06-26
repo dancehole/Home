@@ -612,14 +612,16 @@ i.iconfont.icon-z_shangpinheji {
 
 .mores .more {
     display: flex !important;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     flex-direction: column;
     align-items: center;
+    gap: 2rem;
     animation: fade;
     -webkit-animation: fade 0.3s;
     -moz-animation: fade 0.3s;
     -o-animation: fade 0.3s;
     -ms-animation: fade 0.3s;
+    overflow-y: auto;
 }
 
 .mores .col.right {
@@ -666,6 +668,20 @@ i.iconfont.icon-z_shangpinheji {
 }
 
 /*其他链接*/
+
+#misc-links {
+    width: 100%;
+}
+
+#misc-links .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#misc-links .col {
+    flex: 1;
+}
 
 .mores .link-card {
     height: 48px !important;

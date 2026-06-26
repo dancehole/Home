@@ -13,8 +13,8 @@ const TOKEN_COOKIE_DAYS = 365;
 
 /* API 配置 */
 const API_CONFIG = {
-  baseUrl: 'http://127.0.0.1:5000',
-  hitokotoEndpoint: '/push',
+  baseUrl: 'https://dancehole.cn/api/self-system-message',
+  hitokotoEndpoint: '/',
   hitokotoParams: {
     max_length: 30,
     encode: 'json'
@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { link: "https://dancehole.cn/system/message", descript: "个人语录", ico: '<i class="fa fa-quote-right" aria-hidden="true"></i>' },
     { link: "https://dancehole.cn/system/contacts", descript: "通讯录", ico: '<i class="fa fa-address-book" aria-hidden="true"></i>' },
     { link: "https://dancehole.cn/system/faceRec", descript: "人脸识别系统", ico: '<i class="fa fa-user-circle" aria-hidden="true"></i>' },
-    { link: "https://dancehole.cn/system/imageList", descript: "图床", ico: '<i class="fa fa-image" aria-hidden="true"></i>' },
+    { link: "https://pic.dancehole.cn", descript: "图床", ico: '<i class="fa fa-image" aria-hidden="true"></i>' },
 
 
     //超过15个的部分会自动忽略，不建议超过9个
