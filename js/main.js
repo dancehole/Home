@@ -119,8 +119,8 @@ function renderPrivateHitokoto(data) {
     const topic = data.topic || '';
     const content = data.content || '';
     const type = data.type || '私有';
-    $('#hitokoto_topic').html(truncateText(topic, 15));
-    $('#hitokoto_text').html(truncateText(content, 30));
+    $('#hitokoto_topic').html(topic);
+    $('#hitokoto_text').html(content);
     $('#from_text').html(type);
 }
 

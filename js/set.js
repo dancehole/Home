@@ -14,9 +14,8 @@ const TOKEN_COOKIE_DAYS = 365;
 /* API 配置 */
 const API_CONFIG = {
   baseUrl: 'https://dancehole.cn/api/self-system-message',
-  hitokotoEndpoint: '/',
+  hitokotoEndpoint: '/push',
   hitokotoParams: {
-    max_length: 30,
     encode: 'json'
   }
 };
