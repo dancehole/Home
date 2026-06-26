@@ -290,6 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { "link": "#", "descript": "编辑器", "ico": "" },
     { "link": "https://blog.bywind.xyz//gallery/", "descript": "时光相册", "ico": "" },
     { "link": "#", "descript": "文件库", "ico": "" },
+    { "link": "https://pic.dancehole.cn/", "descript": "图床", "ico": "" },
     { "link": "#", "descript": "更多", "ico": "", "isMore": true },
   ];
 
