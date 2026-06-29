@@ -113,14 +113,42 @@ function truncateText(text, maxLen) {
     return text.substring(0, maxLen) + '...';
 }
 
+function truncateHitokoto(topic, content) {
+    const TOPIC_MAX = 60;
+    const CONTENT_MAX = 60;
+    const TOTAL_MAX = 80;
+    const ELLIPSIS = '...';
+
+    let t = topic || '';
+    let c = content || '';
+
+    if (t.length > TOPIC_MAX) {
+        t = t.substring(0, TOPIC_MAX) + ELLIPSIS;
+    }
+    if (c.length > CONTENT_MAX) {
+        c = c.substring(0, CONTENT_MAX) + ELLIPSIS;
+    }
+
+    const totalLen = t.length + c.length;
+    if (totalLen > TOTAL_MAX) {
+        const remaining = TOTAL_MAX - t.length - ELLIPSIS.length;
+        if (remaining > 0) {
+            c = c.substring(0, remaining) + ELLIPSIS;
+        } else {
+            c = ELLIPSIS;
+        }
+    }
+
+    return { topic: t, content: c };
+}
+
 function renderPrivateHitokoto(data) {
     currentHitokoto = data;
     isPrivateHitokoto = true;
-    const topic = truncateText(data.topic || '', 15);
-    const content = truncateText(data.content || '', 60);
+    const result = truncateHitokoto(data.topic || '', data.content || '');
     const type = data.type || '私有';
-    $('#hitokoto_topic').html(topic);
-    $('#hitokoto_text').html(content);
+    $('#hitokoto_topic').html(result.topic);
+    $('#hitokoto_text').html(result.content);
     $('#from_text').html(type);
 }
 
