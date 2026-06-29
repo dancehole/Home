@@ -244,9 +244,10 @@ document.addEventListener("DOMContentLoaded", function () {
     { link: "https://dancehole.cn/littletext/", descript: "记事本", ico: '<i class="fa fa-edit" aria-hidden="true"></i>' },
     { link: "https://dancehole.cn/worktable/", descript: "工作台", ico: '<i class="fa fa-desktop" aria-hidden="true"></i>' },
     { link: "https://dancehole.cn/todo/", descript: "待办事项", ico: '<i class="fa fa-check-square" aria-hidden="true"></i>' },
-    { link: "https://dancehole.cn/system/message", descript: "个人语录", ico: '<i class="fa fa-quote-right" aria-hidden="true"></i>' },
-    { link: "https://dancehole.cn/system/contacts", descript: "通讯录", ico: '<i class="fa fa-address-book" aria-hidden="true"></i>' },
-    { link: "https://dancehole.cn/system/faceRec", descript: "人脸识别系统", ico: '<i class="fa fa-user-circle" aria-hidden="true"></i>' },
+    { link: "https://dancehole.cn/system/message/", descript: "个人语录", ico: '<i class="fa fa-quote-right" aria-hidden="true"></i>' },
+    // { link: "https://dancehole.cn/system/contacts/", descript: "通讯录", ico: '<i class="fa fa-address-book" aria-hidden="true"></i>' },
+    { link: "192.168.31.1:5000", descript: "通讯录", ico: '<i class="fa fa-address-book" aria-hidden="true"></i>' },
+    { link: "https://brief.dancehole.cn", descript: "我的简历", ico: '<i class="fa fa-user-circle" aria-hidden="true"></i>' },
     { link: "https://pic.dancehole.cn", descript: "图床", ico: '<i class="fa fa-image" aria-hidden="true"></i>' },
 
 
