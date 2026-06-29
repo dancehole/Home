@@ -116,8 +116,8 @@ function truncateText(text, maxLen) {
 function renderPrivateHitokoto(data) {
     currentHitokoto = data;
     isPrivateHitokoto = true;
-    const topic = data.topic || '';
-    const content = data.content || '';
+    const topic = truncateText(data.topic || '', 15);
+    const content = truncateText(data.content || '', 60);
     const type = data.type || '私有';
     $('#hitokoto_topic').html(topic);
     $('#hitokoto_text').html(content);
@@ -128,7 +128,7 @@ function renderPublicHitokoto(data) {
     currentHitokoto = data;
     isPrivateHitokoto = false;
     $('#hitokoto_topic').html('');
-    $('#hitokoto_text').html(data.hitokoto || '');
+    $('#hitokoto_text').html(truncateText(data.hitokoto || '', 60));
     $('#from_text').html(data.from || '');
 }
 
