@@ -35,6 +35,14 @@
 
 
 
+### 近期更新
+
+- **一言截断**：标题超过 15 字、正文超过 60 字时自动截断显示 `...`，详情弹窗（右击）仍展示完整内容
+- **一言样式调整**：优化卡片内的排版与展示效果
+- **个人语录 API**：切换为线上地址 `https://dancehole.cn/api/self-system-message`，端点 `/push`；支持带 Token 鉴权访问私有语录，未带 Token 时回退到公共 Hitokoto
+- **杂七杂八布局**：调整「more」容器的间距、对齐方式与卡片均分布局，并新增项目配置模板外链 `https://intro.dancehole.cn/`
+- **图床外链**：在 miscLinks 中加入图床入口 `pic.dancehole.cn`
+
 ### 天气
 
 由于原天气 API 不稳定，已更换天气 API，现需要前往以下网站获取 key
